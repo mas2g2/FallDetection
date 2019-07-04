@@ -1,7 +1,7 @@
 import csv 
 import numpy as np
 import math as m
-
+import matplotlib.pyplot as plt
 # This function loads data from csv file to numpy array
 def load_data(filename):
     # Opens file for reading
@@ -27,6 +27,8 @@ def split_data(data,train=0.5,test=0.5):
     # Returns testing data and training data
     return train,test
 
+# This function calculates the average of all samples in the dataset which will be
+# used for the principal component analysis algorithm
 def mean(data):
     sum_arr = np.zeros((1,6))
     for i in range(16382):
@@ -50,9 +52,17 @@ print("Covariance: ",cov)
 w,v = np.linalg.eig(cov)
 print("Weights :\n",w);
 print("Vectors : \n",v)
-print("Proportion of variance with first three eig val : ",np.sum(w[:3])/np.sum(w))
-print(w[:3])
-W = v[:,:3]
-print(W)
-#train,test = split_data(data,train=0.8,test=0.2)
+print("Proportion of variance with first three eig val : ",np.sum(w[:2])/np.sum(w))
+
+W = v[:,:2]
+
+train,test = split_data(data,train=0.8,test=0.2)
+train_X,train_Y = train[:,1:],train[:,0]
+
+z_train = W.T.dot(train_X.T)
+x = z_train[0,:]
+y = z_train[1,:]
+plt.plot(x,y)
+plt.show()
+print(z_train.shape)
 
